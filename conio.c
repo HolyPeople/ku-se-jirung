@@ -42,15 +42,15 @@ int getKey() {
 	return ch;
 }
 
-int pushedButtonDector() {
+BUTTON pushedButtonDector() {
 	int key = 0;
-	int res = 0;
+	BUTTON res = 0;
 	if(kbhit()) {
 		key = getKey();
 		if ('A' <= key && key <= 'D')
-			res = key;
+			res = key - 'A' + 1;
 		else if ('a' <= key && key <= 'd')
-			res = key - 32;
+			res = key - 'a' + 1;
 		else if (key == 27) /* ESC KEY INPUT */
 			exit(0);
 	}
