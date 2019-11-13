@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "conio.h"
 #include "modeController.h"
 
 void modeController() {
@@ -17,7 +18,17 @@ Time* autoIncreaseTime(Time* currentTime) {
 		/* In One Second */
 		t++; /* Increae one second */
 		p_clock = clock(); /* Assign current clock to p_clock */
-		printf("%llu\r\n", t);
+		
+		gotoxy(0, 0);
+		printf("%llu", t);
+		printf("    %d, %d, %d, %d:%d:%d \r\n",
+				currentTime->tm_year + 1900,
+				currentTime->tm_mon + 1,
+				currentTime->tm_mday,
+				currentTime->tm_hour,
+				currentTime->tm_min,
+				currentTime->tm_sec
+				);
 	}
 
 	return localtime(&t);

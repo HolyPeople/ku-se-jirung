@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <termios.h>
+#include <windows.h>
 
 typedef enum _BUTTON {
 	NONE = 0, A, B, C, D
@@ -12,6 +13,8 @@ typedef enum _BUTTON {
 
 struct termios orig_termios;
 
+
+void gotoxy(int, int);
 void reset_terminal_mode();
 void set_conio_terminal_mode();
 int kbhit();

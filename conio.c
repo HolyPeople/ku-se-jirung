@@ -1,5 +1,9 @@
 #include "conio.h"
 
+void gotoxy(int x, int y) {
+	printf("\033[%d;%df",y,x);
+}
+
 void reset_terminal_mode() {
     tcsetattr(0, TCSANOW, &orig_termios);
 }

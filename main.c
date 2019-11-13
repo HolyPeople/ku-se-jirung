@@ -1,19 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "conio.h"
 #include "modeController.h"
 
 /* main function */
-int main(int argc, char *argv[]) {
-	
-	currentTime = (Time*)malloc(sizeof(Time));
-	currentTime->tm_sec = 0;
-	currentTime->tm_min = 0;
-	currentTime->tm_hour = 0;
-	currentTime->tm_mday = 0;
-	currentTime->tm_mon = 1;
-	currentTime->tm_year = 119;
+int main(int argc, char *argv[]) {	
+	time_t init_time = 1546268400; /* 2019.01.01 00:00:00 */
+	currentTime = localtime(&init_time); 
 	int key = 0;
-    set_conio_terminal_mode();
+    
+	system("clear");
+
+	set_conio_terminal_mode();
 	while (1) {
 		if (key = pushedButtonDector())
 			printf("%d\r\n", key);
