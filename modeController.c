@@ -21,7 +21,7 @@ Time* autoIncreaseTime(Time* currentTime) {
 		
 		gotoxy(0, 0);
 		printf("%llu", t);
-		printf("    %d, %d, %d, %d:%d:%d \r\n",
+		printf("    \033[4m%04d\033[0m, %02d, %02d, %02d:%02d:%02d \r\n",
 				currentTime->tm_year + 1900,
 				currentTime->tm_mon + 1,
 				currentTime->tm_mday,
