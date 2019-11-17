@@ -5,7 +5,9 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <termios.h>
+/*
 #include <windows.h>
+*/// LINUX
 
 typedef enum _BUTTON {
 	NONE = 0, A, B, C, D
