@@ -9,7 +9,7 @@
 
 #include "modeController.h"
 #include "alarmController.h"
-#include "BackLightController.h"
+#include "backLightController.h"
 
 
 int idle = 0; 
