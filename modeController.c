@@ -3,10 +3,14 @@
 #include "modeController.h"
 
 extern MODE mode;
+extern int isRingAlarm;
 
 void modeController( ) {
 
 	currentTime = autoIncreaseTime(currentTime);
+
+	if ( isRingAlarm )	// No button works If isRingAlarm=1
+		return;
 
 	if ( mode == TK_MODE )
 		timekeeping_mode();
