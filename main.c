@@ -12,7 +12,7 @@
 #include "alarmController.h"
 #include "conio.h"
 #include "modeController.h"
-#include "BackLightController.h"
+#include "backLightController.h"
 
 /* GLOBAL */
 MODE mode = TK_MODE;
