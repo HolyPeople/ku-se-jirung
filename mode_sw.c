@@ -16,7 +16,7 @@ extern BUTTON btn;
 void *sw_increase( void* arg ) {
 	// thread handler
 	
-        static clock_t p_clock =0;//To check clock_per_sec/100;
+        static clock_t a_clock =0;//To check clock_per_sec/100;
 	clock_t cu_clock = clock();// To check 
 	sw_time.min = 0; 
 	sw_time.sec = 0;
@@ -27,9 +27,9 @@ while ( 1 ) {
                 if ( sw_isWork == TRUE ) {
                         // XXX PROCESS 2.2.9: Stopwatch Measurement XXX
                         // TODO increase
-                if(cu_clock - p_clock >= CLOCKS_PER_SEC/100) {
+                if(cu_clock - a_clock >= CLOCKS_PER_SEC/100) {
                         sw_time.centi ++;
-                        p_clock = clock();
+                        a_clock = clock();
                 }
                 if(sw_time.centi=100){
                         sw_time.centi = 0;
