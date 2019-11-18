@@ -35,8 +35,9 @@ int main(int argc, char *argv[]) {
 	while (1) {
 		if ( btn = pushedButtonDector())
 			printf("%d\r\n", btn);
-		modeController( );
-		alarmController( );
 		backLightController(btn);
+		modeController( );
+		alarmController();
+		
 	}
 }
