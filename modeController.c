@@ -4,7 +4,7 @@
 
 extern MODE mode;
 
-void modeController( Time* alarmTime, BOOL* alarmSet, sw_Time* swLap, BOOL* sw_isLap ) {
+void modeController(  ) {
 
 	currentTime = autoIncreaseTime(currentTime);
 
