@@ -7,6 +7,7 @@
 
 typedef struct tm Time;
 Time* currentTime;
+Time* changeTime;
 
 typedef enum _MODE {
         TK_MODE, AL_MODE, SW_MODE
@@ -36,6 +37,8 @@ typedef struct time_sw {
 void modeController( );
 
 Time* autoIncreaseTime(Time* currentTime);
+
+void time_switch( Time* dst, Time* src );
 
 /* function in mode_tk.c */
 void timekeeping_mode( );

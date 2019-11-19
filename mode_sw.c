@@ -11,6 +11,7 @@ sw_Time sw_lap;			// global for display
 BOOL sw_isLap = FALSE;		// global for display
 extern MODE mode;
 extern BUTTON btn;
+extern Time* changeTime;
 
 /* FUNCTION */
 
