@@ -42,7 +42,7 @@ Time* autoIncreaseTime(Time* currentTime) {
 /*XXX*///gotoxy(0, 0);
 /*XXX*///printf("%lu", t);
 /*XXX*/
-/*		printf("    \033[4m%04d\033[0m, %02d, %02d, %02d:%02d:%02d\r\n",
+		printf("    \033[4m%04d\033[0m, %02d, %02d, %02d:%02d:%02d\r\n",
 				currentTime->tm_year + 1900,
 				currentTime->tm_mon + 1,
 				currentTime->tm_mday,
@@ -50,7 +50,7 @@ Time* autoIncreaseTime(Time* currentTime) {
 				currentTime->tm_min,
 				currentTime->tm_sec
 				);
-*/
+
 	}
 
 	return localtime(&t);

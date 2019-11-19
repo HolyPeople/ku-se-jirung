@@ -11,6 +11,7 @@ sw_Time sw_lap;			// global for display
 BOOL sw_isLap = FALSE;		// global for display
 extern MODE mode;
 extern BUTTON btn;
+extern Time* changeTime;
 
 /* FUNCTION */
 
@@ -98,6 +99,7 @@ void stopwatch_mode( ) {
 	// if BUTTON-C pressed && !sw_isWork,	goto TIME KEEPING MODE
 	if ( btn == C && sw_isWork == FALSE ) {
 /*XXX*/ printf( "stopwatch_mode(): Mode Change - TK; RETURN\r\n" );
+		time_switch( changeTime, currentTime );
 		mode = ( mode + 1 ) % 3;
 		return;
 	}

@@ -22,6 +22,7 @@ BUTTON btn = NONE;
 int main(int argc, char *argv[]) {	
 	time_t init_time = 1546268400; /* 2019.01.01 00:00:00 */
 	currentTime = localtime(&init_time); 
+	changeTime = (Time*) malloc( sizeof( Time ) );
     
 	Time alarmTime = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         BOOL alarmSet = FALSE;
