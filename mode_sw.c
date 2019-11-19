@@ -6,6 +6,7 @@
 pthread_t sw_thread;		// global for thread
 sw_Time sw_time;		// global for thread
 BOOL sw_isWork = FALSE;		// global for thread
+pthread_mutex_t sw_mtx = PTHREAD_MUTEX_INITIALIZER;
 sw_Time sw_lap;			// global for display
 BOOL sw_isLap = FALSE;		// global for display
 extern MODE mode;
@@ -15,36 +16,41 @@ extern BUTTON btn;
 
 void *sw_increase( void* arg ) {
 	// thread handler
-	
-        static clock_t a_clock =0;//To check clock_per_sec/100;
-	clock_t cu_clock = clock();// To check 
-	sw_time.min = 0; 
-	sw_time.sec = 0;
-	sw_time.centi = 0;
+	stopwatch_reset();
 
-/*XXX*/// printf( "sw_increase(): INCREASING START\n" );
-while ( 1 ) {
-                if ( sw_isWork == TRUE ) {
-                        // XXX PROCESS 2.2.9: Stopwatch Measurement XXX
-                        // TODO increase
-                if(cu_clock - a_clock >= CLOCKS_PER_SEC/100) {
-                        sw_time.centi ++;
-                        a_clock = clock();
-                }
-                if(sw_time.centi=100){
-                        sw_time.centi = 0;
-                        sw_time.sec++;
-                }
-                if(sw_time.sec=60){
-                        sw_time.sec = 0;
-                        sw_time.min++;
-                }
-                
-                }
-                if ( mode != SW_MODE )
-                        break;
-        }
-/*XXX*/// printf( "sw_increase(): INCREASING FINISH\n" );
+	struct timespec from;
+	struct timespec now;
+
+	clock_gettime( CLOCK_MONOTONIC, &from );
+
+/*XXX*/ printf( "sw_increase(): INCREASING START\r\n" );
+	while ( 1 ) {
+		if ( sw_isWork == TRUE ) {
+			// XXX PROCESS 2.2.9: Stopwatch Measurement XXX
+			// TODO FIXME increase
+			clock_gettime( CLOCK_MONOTONIC, &now );
+			if ( ( now.tv_sec * 1000000000 + now.tv_nsec ) - ( from.tv_sec * 1000000000 + from.tv_nsec ) >= 10000000 ) {
+				pthread_mutex_lock( &sw_mtx );
+				sw_time.centi++;
+/*XXX*/	printf( "sw_increase(): %d:%d:%d\r\n", sw_time.min, sw_time.sec, sw_time.centi );
+		
+				if ( sw_time.centi >= 100 ) {
+					sw_time.centi -= 100;
+					sw_time.sec++;
+
+					if ( sw_time.sec >= 60 ) {
+						sw_time.sec -= 60;
+						sw_time.min++;
+					}
+				}
+				pthread_mutex_unlock( &sw_mtx );
+				clock_gettime( CLOCK_MONOTONIC, &from );
+			}
+		}
+		if ( mode != SW_MODE )
+			break;
+	}
+/*XXX*/ printf( "sw_increase(): INCREASING FINISH\r\n" );
 }
 
 void record_laptime( ) {
@@ -53,17 +59,21 @@ void record_laptime( ) {
 	// sw_isLap: is laptime on display?
 	
 	sw_isLap = TRUE;
+	pthread_mutex_lock( &sw_mtx );
         memcpy( &sw_lap, &sw_time, sizeof( sw_Time ) );
-/*XXX*/// printf( "record_laptime(): Lap=%d:%d:%d\n", sw_lap.min, sw_lap.sec, sw_lap.centi );
+	pthread_mutex_unlock( &sw_mtx );
+/*XXX*/ printf( "record_laptime(): Lap=%d:%d:%d\r\n", sw_lap.min, sw_lap.sec, sw_lap.centi );
 }
 
 void stopwatch_reset( ) {
 	// sw_time: increasing stopwatch time TO RESET
 
+	pthread_mutex_lock( &sw_mtx );
         sw_time.min = 0;
         sw_time.sec = 0;
         sw_time.centi = 0;
-/*XXX*/// printf( "stopwatch_reset()\n" );
+	pthread_mutex_unlock( &sw_mtx );
+/*XXX*/ printf( "stopwatch_reset()\r\n" );
 }
 
 
@@ -81,13 +91,13 @@ void stopwatch_mode( ) {
 
 	
 	if ( mode != SW_MODE ) {
-/*XXX*/// printf( "stopwatch_mode(): Not Stopwatch Mode - RETURN\n" );
-                return;
+/*XXX*/ printf( "stopwatch_mode(): Not Stopwatch Mode - RETURN\r\n" );
+        return;
 	}
 
 	// if BUTTON-C pressed && !sw_isWork,	goto TIME KEEPING MODE
 	if ( btn == C && sw_isWork == FALSE ) {
-/*XXX*/// printf( "stopwatch_mode(): Mode Change - TK; RETURN\n" );
+/*XXX*/ printf( "stopwatch_mode(): Mode Change - TK; RETURN\r\n" );
 		mode = ( mode + 1 ) % 3;
 		return;
 	}
@@ -98,12 +108,12 @@ void stopwatch_mode( ) {
 		if ( sw_isLap == FALSE ) {
 			// if BUTTON-B pressed && !sw_isLab	sw_isWork: T -> F -> T
 			sw_isWork = ( sw_isWork + 1 ) % 2;
-/*XXX*/// printf( "stopwatch_mode(): isWork=%d\n", sw_isWork );
+/*XXX*/ printf( "stopwatch_mode(): isWork=%d\r\n", sw_isWork );
 		}
 		else {
 			// if BUTTON-B pressed && sw_isLab	show sw_time
 			sw_isLap = FALSE;
-/*XXX*/// printf( "stopwatch_mode(): isWork=%d; isLap=%d\n", sw_isWork, sw_isLap );
+/*XXX*/ printf( "stopwatch_mode(): isWork=%d; isLap=%d\r\n", sw_isWork, sw_isLap );
 		}
 	}
 

@@ -15,7 +15,7 @@ void alarm_onoff() {
 	// al_isSetted: is alarm setted?
 
 	al_isSetted =  ( al_isSetted + 1 ) % 2;
-/*XXX*/// printf( "alarm_onoff(): al_isSetted=%d\n", al_isSetted );
+/*XXX*/ printf( "alarm_onoff(): al_isSetted=%d\r\n", al_isSetted );
 }
 
 void switch_setting_alarm_time( AL_CH* toChange ) {
@@ -24,7 +24,7 @@ void switch_setting_alarm_time( AL_CH* toChange ) {
 	// return: selected
 
 	*toChange = ( *toChange + 1 ) % 2;
-/*XXX*/// printf( "switch_setting_alarm_time(): tochange=%d\n", *toChange );
+/*XXX*/ printf( "switch_setting_alarm_time(): tochange=%d\r\n", *toChange );
 }
 
 void increase_alarm_time( AL_CH toChange ) {
@@ -39,7 +39,7 @@ void increase_alarm_time( AL_CH toChange ) {
 			al_time.tm_min = ( al_time.tm_min + 1 ) % 60;
 			break;
 	}
-/*XXX*/// printf( "increase_alarm_time(): Alarm=%d:%d\n", al_time.tm_hour, al_time.tm_min );
+/*XXX*/ printf( "increase_alarm_time(): Alarm=%d:%d\r\n", al_time.tm_hour, al_time.tm_min );
 }
 
 
@@ -58,7 +58,7 @@ void alarm_mode() {
 
 
 	if ( mode != AL_MODE ) {
-/*XXX*/// printf( "alarm_mode(): Not Alarm Mode - RETURN\n" );
+/*XXX*/ printf( "alarm_mode(): Not Alarm Mode - RETURN\r\n" );
 		return;
 	}
 
@@ -67,7 +67,7 @@ void alarm_mode() {
 		if ( btn == C ) {
 	                mode = ( mode + 1 ) % 3;
 			pthread_create( &sw_thread, NULL, sw_increase, NULL );
-/*XXX*/// printf( "alarm_mode(): Mode Change - SW; RETURN\n" );
+/*XXX*/ printf( "alarm_mode(): Mode Change - SW; RETURN\r\n" );
 			btn = NONE;
         	        return;
         	}
@@ -81,7 +81,7 @@ void alarm_mode() {
 		if ( btn == A ) {
 			isSetting = ( isSetting + 1 ) % 2;
 			toChange = AL_HOUR;
-/*XXX*/// printf( "alarm_mode(): ALARM SETTING MODE BEGIN; toChange=%d\n", toChange );
+/*XXX*/ printf( "alarm_mode(): ALARM SETTING MODE BEGIN; toChange=%d\r\n", toChange );
 		}
 		// XXX DISPLAY - PROCESS 2.2.12: Alarm Setting ( toChange )
 	}
@@ -106,7 +106,7 @@ void alarm_mode() {
 		if ( btn == A ) {
 			isSetting = ( isSetting + 1 ) % 2;
 			// XXX DISPLAY PROCESS 2.2.13: Alarm
-/*XXX*/// printf( "alarm_mode(): ALARM MODE BEGIN\n" );
+/*XXX*/ printf( "alarm_mode(): ALARM MODE BEGIN\r\n" );
 		}
 	}
 

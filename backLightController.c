@@ -20,7 +20,7 @@ void backLightController(int btn){
 	if(isRingAlarm == 0 && btn ==4){
 		idle = 1;
 		BackLightTime.tm_sec = currentTime->tm_sec;
-		backLight();//이렇게 안 할 수 없을까?
+		backLight();//FIXME: 이렇게 안 할 수 없을까?
 	}	
 
 	
