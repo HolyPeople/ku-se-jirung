@@ -23,10 +23,10 @@ Time* autoIncreaseTime(Time* currentTime) {
 	static struct timespec p_clock;
 	struct timespec c_clock = { 0, 0 };
 	
-	static int strt = 0;
-	if ( strt == 0 ) {
+	static int start = 0;
+	if ( start == 0 ) {
 		clock_gettime( CLOCK_MONOTONIC, &p_clock );
-		strt = 1;
+        start = 1;
 	}
 	clock_gettime( CLOCK_MONOTONIC, &c_clock );
 
@@ -35,6 +35,8 @@ Time* autoIncreaseTime(Time* currentTime) {
 //	if (c_clock - p_clock >= CLOCKS_PER_SEC) {
 	if ( ( c_clock.tv_sec * 1000000000 + c_clock.tv_nsec ) - ( p_clock.tv_sec * 1000000000 + p_clock.tv_nsec ) >= 1000000000 ) {
 		/* In One Second */
+		if (t == 4102444799)
+		    t = 1546268399;
 		t++; /* Increae one second */
 //		p_clock = clock(); /* Assign current clock to p_clock */
 		clock_gettime( CLOCK_MONOTONIC, &p_clock );
