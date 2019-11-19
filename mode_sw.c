@@ -11,6 +11,7 @@ sw_Time sw_lap;			// global for display
 BOOL sw_isLap = FALSE;		// global for display
 extern MODE mode;
 extern BUTTON btn;
+extern BOOL al_isSetted; // Add for Display by harheem
 
 /* FUNCTION */
 
@@ -23,7 +24,7 @@ void *sw_increase( void* arg ) {
 
 	clock_gettime( CLOCK_MONOTONIC, &from );
 
-/*XXX*/ printf( "sw_increase(): INCREASING START\r\n" );
+/*XXX*/ //printf( "sw_increase(): INCREASING START\r\n" );
 	while ( 1 ) {
 		if ( sw_isWork == TRUE ) {
 			// XXX PROCESS 2.2.9: Stopwatch Measurement XXX
@@ -32,7 +33,7 @@ void *sw_increase( void* arg ) {
 			if ( ( now.tv_sec * 1000000000 + now.tv_nsec ) - ( from.tv_sec * 1000000000 + from.tv_nsec ) >= 10000000 ) {
 				pthread_mutex_lock( &sw_mtx );
 				sw_time.centi++;
-/*XXX*/	printf( "sw_increase(): %d:%d:%d\r\n", sw_time.min, sw_time.sec, sw_time.centi );
+/*XXX*/	//printf( "sw_increase(): %d:%d:%d\r\n", sw_time.min, sw_time.sec, sw_time.centi );
 		
 				if ( sw_time.centi >= 100 ) {
 					sw_time.centi -= 100;
@@ -50,7 +51,7 @@ void *sw_increase( void* arg ) {
 		if ( mode != SW_MODE )
 			break;
 	}
-/*XXX*/ printf( "sw_increase(): INCREASING FINISH\r\n" );
+/*XXX*/ //printf( "sw_increase(): INCREASING FINISH\r\n" );
 }
 
 void record_laptime( ) {
@@ -62,7 +63,7 @@ void record_laptime( ) {
 	pthread_mutex_lock( &sw_mtx );
         memcpy( &sw_lap, &sw_time, sizeof( sw_Time ) );
 	pthread_mutex_unlock( &sw_mtx );
-/*XXX*/ printf( "record_laptime(): Lap=%d:%d:%d\r\n", sw_lap.min, sw_lap.sec, sw_lap.centi );
+/*XXX*/// printf( "record_laptime(): Lap=%d:%d:%d\r\n", sw_lap.min, sw_lap.sec, sw_lap.centi );
 }
 
 void stopwatch_reset( ) {
@@ -72,11 +73,24 @@ void stopwatch_reset( ) {
         sw_time.min = 0;
         sw_time.sec = 0;
         sw_time.centi = 0;
+		//Add LabTime Initialization by harheem
+		sw_lap.centi = 0;
+		sw_lap.min = 0;
+		sw_lap.sec = 0;
 	pthread_mutex_unlock( &sw_mtx );
-/*XXX*/ printf( "stopwatch_reset()\r\n" );
+/*XXX*/ //printf( "stopwatch_reset()\r\n" );
 }
 
 
+void display_sw(int hour, int minute, int sw_miniute, int sw_second, int sw_microsecond) {
+	gotoxy(0, 0);
+	printf("   -----------\r\n");
+	printf("    %c[1;100mST %02d:%02d%c[0;0m \r\n", 27, hour, minute, 27);
+	printf("  -------------\r\n\r\n");
+	if (al_isSetted) printf("  *  %c[1;101m%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, sw_miniute, sw_second, sw_microsecond, 27);
+	printf("     %c[1;101m%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, sw_miniute, sw_second, sw_microsecond, 27);
+	printf("   -----------\r\n");
+}
 
 // if BUTTON-C pressed in ALARM MODE,    become STOPWATCH MODE
 // XXX DISPLAY PROCESS 2.2.7: Stopwatch Mode
@@ -88,16 +102,19 @@ void stopwatch_mode( ) {
 	// sw_isLap: is laptime on display? -> global for display
 	// sw_isWork: is stopwatch work?
 	// sw_thread: thread for increment
-
 	
 	if ( mode != SW_MODE ) {
-/*XXX*/ printf( "stopwatch_mode(): Not Stopwatch Mode - RETURN\r\n" );
+/*XXX*/ //printf( "stopwatch_mode(): Not Stopwatch Mode - RETURN\r\n" );
         return;
 	}
 
+	//if LabTime is Not 00'00"00 -> Display LabTime by harheem
+	if (sw_lap.centi || sw_lap.min || sw_lap.sec) display_sw(currentTime->tm_hour, currentTime->tm_min, sw_lap.min, sw_lap.sec, sw_lap.centi);
+	else display_sw(currentTime->tm_hour, currentTime->tm_min, sw_time.min, sw_time.sec, sw_time.centi);
+
 	// if BUTTON-C pressed && !sw_isWork,	goto TIME KEEPING MODE
 	if ( btn == C && sw_isWork == FALSE ) {
-/*XXX*/ printf( "stopwatch_mode(): Mode Change - TK; RETURN\r\n" );
+/*XXX*/ //printf( "stopwatch_mode(): Mode Change - TK; RETURN\r\n" );
 		mode = ( mode + 1 ) % 3;
 		return;
 	}
@@ -108,12 +125,12 @@ void stopwatch_mode( ) {
 		if ( sw_isLap == FALSE ) {
 			// if BUTTON-B pressed && !sw_isLab	sw_isWork: T -> F -> T
 			sw_isWork = ( sw_isWork + 1 ) % 2;
-/*XXX*/ printf( "stopwatch_mode(): isWork=%d\r\n", sw_isWork );
+/*XXX*/ //printf( "stopwatch_mode(): isWork=%d\r\n", sw_isWork );
 		}
 		else {
 			// if BUTTON-B pressed && sw_isLab	show sw_time
 			sw_isLap = FALSE;
-/*XXX*/ printf( "stopwatch_mode(): isWork=%d; isLap=%d\r\n", sw_isWork, sw_isLap );
+/*XXX*/ //printf( "stopwatch_mode(): isWork=%d; isLap=%d\r\n", sw_isWork, sw_isLap );
 		}
 	}
 
