@@ -18,6 +18,7 @@ void manual_incease_time( W_CH toChange ) {
 	// toChange: what to change
 
 	int year = 0;	// for OPT
+	int day = 0;	// for day++
 
 	switch ( toChange ) {
 		case W_SEC:
@@ -38,7 +39,8 @@ void manual_incease_time( W_CH toChange ) {
 			currentTime->tm_mon = ( currentTime->tm_mon + 1 ) % 12;
 			break;
 		case W_DAY:
-			//FIXME: Do Not Initalize mday, when mday is MAX;
+			day = currentTime->tm_mday + 1;
+
 			switch( currentTime->tm_mon ) {
 				case 0:
 				case 2:
@@ -47,17 +49,31 @@ void manual_incease_time( W_CH toChange ) {
 				case 7:
 				case 9:
 				case 11:
-					currentTime->tm_mday = ( currentTime->tm_mday + 1 ) % 31;
+					if ( day > 31 )
+						currentTime->tm_mday = 1;
+					else
+						currentTime->tm_mday = day;
 					break;
 				case 1:
 					year = currentTime->tm_year;
-					if ( ( !( year % 4 ) && ( year % 100 ) ) || !( year % 400 ) )
-						currentTime->tm_mday = ( currentTime->tm_mday + 1 ) % 29;
-					else
-						currentTime->tm_mday = ( currentTime->tm_mday + 1 ) % 28;
+					if ( ( !( year % 4 ) && ( year % 100 ) ) || !( year % 400 ) ) {
+						if ( day > 29 )
+							currentTime->tm_mday = 1;
+						else
+							currentTime->tm_mday = day;
+					}
+					else {
+						if ( day > 28 )
+							currentTime->tm_mday = 1;
+						else
+							currentTime->tm_mday = day;
+					}
 					break;
 				default:
-					currentTime->tm_mday = ( currentTime->tm_mday + 1 ) % 30;
+						if ( day > 30 )
+							currentTime->tm_mday = 1;
+						else
+							currentTime->tm_mday = day;
 			}
 	}
 /*XXX*/ printf( "manual_increase_time(): Time=%d/%d/%d %d:%d:%d\r\n", currentTime->tm_year+1900, currentTime->tm_mon+1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min, currentTime->tm_sec );
