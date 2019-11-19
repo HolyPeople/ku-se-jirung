@@ -35,12 +35,7 @@ Time* autoIncreaseTime(Time* currentTime) {
 //	if (c_clock - p_clock >= CLOCKS_PER_SEC) {
 	if ( ( c_clock.tv_sec * 1000000000 + c_clock.tv_nsec ) - ( p_clock.tv_sec * 1000000000 + p_clock.tv_nsec ) >= 1000000000 ) {
 		/* In One Second */
-		if (currentTime->tm_year == 199
-		        && currentTime->tm_mon == 11
-		        && currentTime->tm_mday == 31
-		        && currentTime->tm_hour == 23
-		        && currentTime->tm_min == 59
-		        && currentTime->tm_sec == 59)
+		if (t == 4102412399)
 		    t = 1546268399;
 		t++; /* Increae one second */
 //		p_clock = clock(); /* Assign current clock to p_clock */
@@ -49,7 +44,7 @@ Time* autoIncreaseTime(Time* currentTime) {
 /*XXX*///gotoxy(0, 0);
 /*XXX*///printf("%lu", t);
 /*XXX*/
-		printf("    \033[4m%04d\033[0m, %02d, %02d, %02d:%02d:%02d   %d\r\n",
+		printf("    \033[4m%04d\033[0m, %02d, %02d, %02d:%02d:%02d   %llu\r\n",
 				currentTime->tm_year + 1900,
 				currentTime->tm_mon + 1,
 				currentTime->tm_mday,
