@@ -9,6 +9,8 @@ W_CH tk_toChange;	// global for display
 BOOL tk_isSetting;	// global for display
 extern Time* changeTime;
 char day[][3] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
+extern int idle;
+extern int light;
 
 void switch_setting_time( ) {
 	// toChange: select what to change
@@ -92,42 +94,42 @@ void display_tk(int month, int date, int hour, int minute, int second) {
 	printf("   -----------\r\n");
 	if (tk_isSetting) {
 		if (tk_toChange == W_MONTH) {
-			printf("    %c[1;100m%s %c[1;100;4m%02d%c[1;100;24mㆍ%02d%c[0;0;24m \r\n", 27, day[currentTime->tm_wday], 27, month, 27, date, 27);
+			printf("    %c[%d;24m%s %c[%d;4m%02d%c[%d;24m-%02d%c[0;24m \r\n", 27, light, day[currentTime->tm_wday], 27, light, month, 27, light, date, 27);
 		}
-		else if(tk_toChange == W_DAY) printf("    %c[1;100m%s %02dㆍ%c[1;100;4m%02d%c[0;0;24m \r\n", 27, day[currentTime->tm_wday], month, 27, date, 27);
-		else printf("    %c[1;100m%s %02dㆍ%02d%c[0;0m \r\n", 27, day[currentTime->tm_wday], month, date, 27);
+		else if(tk_toChange == W_DAY) printf("    %c[%d;24m%s %02d-%c[%d;4m%02d%c[0;24m \r\n", 27, light, day[currentTime->tm_wday], month, 27, light, date, 27);
+		else printf("    %c[%dm%s %02d-%02d%c[0m \r\n", 27, light, day[currentTime->tm_wday], month, date, 27);
 	}
-	else printf("    %c[1;100m%s %02dㆍ%02d%c[0;0m \r\n", 27, day[currentTime->tm_wday], month, date, 27);
+	else printf("    %c[%dm%s %02d-%02d%c[0m \r\n", 27, light, day[currentTime->tm_wday], month, date, 27);
 	printf("  -------------\r\n\r\n");
 	if (al_isSetted) {
 		if (tk_isSetting) {
 			if (tk_toChange == W_SEC) {
-				printf("  *  %c[1;101;24m%02d:%02d %c[1;101;4m%02d%c[0;0;24m \r\n\r\n", 27, hour, minute, 27, second, 27);
+				printf("  *  %c[%d;24m%02d:%02d %c[%d;4m%02d%c[0;24m \r\n\r\n", 27, light, hour, minute, 27, light, second, 27);
 			}
 			else if (tk_toChange == W_HOUR) {
-				printf("  *  %c[1;101;4m%02d%c[1;101;24m:%02d %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, second, 27);
+				printf("  *  %c[%d;4m%02d%c[%d;24m:%02d %02d%c[0;24m \r\n\r\n", 27, light, hour, 27, light, minute, second, 27);
 			}
 			else if (tk_toChange == W_MIN) {
-				printf("  *  %c[1;101m%02d:%c[1;101;4m%02d%c[1;101;24m %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, 27, second, 27);
+				printf("  *  %c[%d;24m%02d:%c[%d;4m%02d%c[%d;24m %02d%c[0;24m \r\n\r\n", 27, light, hour, 27, light, minute, 27, light, second, 27);
 			}
-			else printf("  *  %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+			else printf("  *  %c[%dm%02d:%02d %02d%c[0m \r\n\r\n", 27, light, hour, minute, second, 27);
 		}
-		else printf("  *  %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+		else printf("  *  %c[%dm%02d:%02d %02d%c[0m \r\n\r\n", 27, light, hour, minute, second, 27);
 	}
 	else {
 		if (tk_isSetting) {
 			if (tk_toChange == W_SEC) {
-				printf("     %c[1;101;24m%02d:%02d %c[1;101;4m%02d%c[0;0;24m \r\n\r\n", 27, hour, minute, 27, second, 27);
+				printf("     %c[%d;24m%02d:%02d %c[%d;4m%02d%c[0;24m \r\n\r\n", 27, light, hour, minute, 27, light, second, 27);
 			}
 			else if (tk_toChange == W_HOUR) {
-				printf("     %c[1;101;4m%02d%c[1;101;24m:%02d %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, second, 27);
+				printf("     %c[%d;4m%02d%c[%d;24m:%02d %02d%c[0;24m \r\n\r\n", 27, light, hour, 27, light, minute, second, 27);
 			}
 			else if (tk_toChange == W_MIN) {
-				printf("     %c[1;101m%02d:%c[1;101;4m%02d%c[1;101;24m %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, 27, second, 27);
+				printf("     %c[%d;24m%02d:%c[%d;4m%02d%c[%d;24m %02d%c[0;24m \r\n\r\n", 27, light, hour, 27, light, minute, 27, light, second, 27);
 			}
-			else printf("     %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+			else printf("     %c[%dm%02d:%02d %02d%c[0m \r\n\r\n", 27, light, hour, minute, second, 27);
 		}
-		else printf("     %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+		else printf("     %c[%dm%02d:%02d %02d%c[0m \r\n\r\n", 27, light, hour, minute, second, 27);
 	}
 	printf("   -----------\r\n");
 }
@@ -145,7 +147,8 @@ void timekeeping_mode( ) {
 /*XXX*/ //printf( "timekeeping_mode(): Not Timekeeping Mode - RETURN\r\n" );
                 return;
 	}
-
+	if (idle == 1) light = 33;
+	else light = 0;
 	if (tk_isSetting == TRUE) display_tk(changeTime->tm_mon + 1, changeTime->tm_mday, changeTime->tm_hour, changeTime->tm_min, changeTime->tm_sec);
 	else display_tk(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min, currentTime->tm_sec);
 
