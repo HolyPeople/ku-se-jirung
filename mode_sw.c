@@ -4,10 +4,10 @@
 /* GLOBAL */
 
 pthread_t sw_thread;		// global for thread
-sw_Time sw_time;		// global for thread
+SW_Time sw_time;		// global for thread
 BOOL sw_isWork = FALSE;		// global for thread
 pthread_mutex_t sw_mtx = PTHREAD_MUTEX_INITIALIZER;
-sw_Time sw_lap;			// global for display
+SW_Time sw_lap;			// global for display
 BOOL sw_isLap = FALSE;		// global for display
 extern MODE mode;
 extern BUTTON btn;
@@ -64,7 +64,7 @@ void record_laptime( ) {
 
 	sw_isLap = TRUE;
 	pthread_mutex_lock( &sw_mtx );
-        memcpy( &sw_lap, &sw_time, sizeof( sw_Time ) );
+        memcpy( &sw_lap, &sw_time, sizeof( SW_Time ) );
 	pthread_mutex_unlock( &sw_mtx );
 /*XXX*/// printf( "record_laptime(): Lap=%d:%d:%d\r\n", sw_lap.min, sw_lap.sec, sw_lap.centi );
 }
@@ -85,13 +85,18 @@ void stopwatch_reset( ) {
 }
 
 
-void display_sw(int hour, int minute, int sw_minute, int sw_second, int sw_microsecond) {
+void display_sw(int type) {
+    SW_Time time = sw_lap;
+
+    if (type)
+        time = sw_time;
+
 	gotoxy(0, 0);
 	printf("   -----------\r\n");
-	printf("    %c[%dmST %02d:%02d%c[0;0m \r\n", 27, light, hour, minute, 27);
+	printf("    %c[%dmST %02d:%02d%c[0;0m \r\n", 27, light, currentTime->tm_hour, currentTime->tm_min, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSet) printf("  *  %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_minute, sw_second, sw_microsecond, 27);
-	else printf("     %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_minute, sw_second, sw_microsecond, 27);
+	if (al_isSet) printf("  *  %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, time.min, time.sec, time.centi, 27);
+	else printf("     %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, time.min, time.sec, time.centi, 27);
 	printf("   -----------\r\n");
 }
 
@@ -115,8 +120,8 @@ void stopwatch_mode( ) {
 	//if LabTime is Not 00'00"00 -> Display LabTime by harheem
 	if (back_lighting == 1) light = 33;
 	else light = 0;
-	if (sw_isLap == TRUE) display_sw(currentTime->tm_hour, currentTime->tm_min, sw_lap.min, sw_lap.sec, sw_lap.centi);
-	else display_sw(currentTime->tm_hour, currentTime->tm_min, sw_time.min, sw_time.sec, sw_time.centi);
+	if (sw_isLap == TRUE) display_sw(0);
+	else display_sw(1);
 
 	// if BUTTON-C pressed && !sw_isWork,	goto TIME KEEPING MODE
 	if ( btn == C && sw_isWork == FALSE ) {

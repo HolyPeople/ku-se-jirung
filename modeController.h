@@ -29,7 +29,7 @@ typedef struct time_sw {
         int min;
         int sec;
         int centi;      // centi-sec
-} sw_Time;
+} SW_Time;
 
 
 /* function */
