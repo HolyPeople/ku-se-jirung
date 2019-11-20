@@ -35,13 +35,13 @@ void backLightController(int btn){
 
 
 void backLight(){
-	 printf("%c[1;33m", 27);
+	idle = 1;
 }
 
 
 void lightOff(){
 
-printf("%c[0m\n",27);
+	idle = 0;
 
 }
 

@@ -13,6 +13,8 @@ extern MODE mode;
 extern BUTTON btn;
 extern BOOL al_isSetted; // Add for Display by harheem
 extern Time* changeTime;
+extern int idle;
+char light = 0;
 
 /* FUNCTION */
 
@@ -86,12 +88,13 @@ void stopwatch_reset( ) {
 void display_sw(int hour, int minute, int sw_miniute, int sw_second, int sw_microsecond) {
 	gotoxy(0, 0);
 	printf("   -----------\r\n");
-	printf("    %c[1;100mST %02d:%02d%c[0;0m \r\n", 27, hour, minute, 27);
+	printf("    %c[%dmST %02d:%02d%c[0;0m \r\n", 27, light, hour, minute, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSetted) printf("  *  %c[1;101m%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, sw_miniute, sw_second, sw_microsecond, 27);
-	else printf("     %c[1;101m%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, sw_miniute, sw_second, sw_microsecond, 27);
+	if (al_isSetted) printf("  *  %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_miniute, sw_second, sw_microsecond, 27);
+	else printf("     %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_miniute, sw_second, sw_microsecond, 27);
 	printf("   -----------\r\n");
 }
+
 
 // if BUTTON-C pressed in ALARM MODE,    become STOPWATCH MODE
 // XXX DISPLAY PROCESS 2.2.7: Stopwatch Mode
@@ -110,6 +113,8 @@ void stopwatch_mode( ) {
 	}
 
 	//if LabTime is Not 00'00"00 -> Display LabTime by harheem
+	if (idle == 1) light = 33;
+	else light = 0;
 	if (sw_isLap == TRUE) display_sw(currentTime->tm_hour, currentTime->tm_min, sw_lap.min, sw_lap.sec, sw_lap.centi);
 	else display_sw(currentTime->tm_hour, currentTime->tm_min, sw_time.min, sw_time.sec, sw_time.centi);
 
