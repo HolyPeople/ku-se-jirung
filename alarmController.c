@@ -6,7 +6,7 @@
 
 extern BUTTON btn;
 extern Time al_time;                   // global for display
-extern BOOL al_isSetted;               // global for display
+extern BOOL al_isSet;               // global for display
 
 
 void ringOff() {
@@ -15,7 +15,7 @@ void ringOff() {
 
 void *ringAlarm(void* args) {
     struct timespec now, from;
-    printf("ringAlarm() : is Created!\r\n");
+    /*XXX*///printf("ringAlarm() : is Created!\r\n");
     while (1) {
         clock_gettime( CLOCK_MONOTONIC, &from);
         if (isRingAlarm)
@@ -25,7 +25,7 @@ void *ringAlarm(void* args) {
             if ( ( now.tv_sec * 1000000000 + now.tv_nsec )
                  - ( from.tv_sec * 1000000000 + from.tv_nsec ) >= 1000000000 ) {
                 system("echo -e '\a'");
-                printf("ringAlarm() : ring\r\n");
+                /*XXX*///printf("ringAlarm() : ring\r\n");
                 clock_gettime( CLOCK_MONOTONIC, &from );
             }
         }
@@ -34,8 +34,8 @@ void *ringAlarm(void* args) {
 
 int check_Alarm_Time(){
 
-    if (al_isSetted == TRUE
-            && (al_time.tm_min== currentTime->tm_min && al_time.tm_hour== currentTime->tm_hour && 0 == currentTime->tm_sec ))
+    if (al_isSet == TRUE
+        && (al_time.tm_min== currentTime->tm_min && al_time.tm_hour== currentTime->tm_hour && 0 == currentTime->tm_sec ))
         return 1;
     else
         return 0;
@@ -44,7 +44,7 @@ int check_Alarm_Time(){
 int alarmController( ) {
 
     if (!isRingAlarm && check_Alarm_Time()) {
-        printf("alarmController() : change isRingAlarm%d\r\n", isRingAlarm);
+        /*XXX*///printf("alarmController() : change isRingAlarm%d\r\n", isRingAlarm);
         isRingAlarm = 1;
     }
 

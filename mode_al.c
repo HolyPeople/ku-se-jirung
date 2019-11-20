@@ -7,19 +7,19 @@ extern MODE mode;
 extern BUTTON btn;
 extern pthread_t sw_thread;
 Time al_time;			// global for display
-BOOL al_isSetted;		// global for display
+BOOL al_isSet;		// global for display
 AL_CH al_toChange;		// global for display
 BOOL al_isSetting;		// global for display
-extern int idle;
+extern int back_lighting;
 extern int light;
 
 /* FUNCTION */
 
 void alarm_onoff() {
-	// al_isSetted: is alarm setted?
+	// al_isSet: is alarm setted?
 
-	al_isSetted =  ( al_isSetted + 1 ) % 2;
-/*XXX*/ //printf( "alarm_onoff(): al_isSetted=%d\r\n", al_isSetted );
+	al_isSet = (al_isSet + 1 ) % 2;
+/*XXX*/ //printf( "alarm_onoff(): al_isSet=%d\r\n", al_isSet );
 }
 
 void switch_setting_alarm_time() {
@@ -52,7 +52,7 @@ void display_al(int month, int date, int hour, int minute) {
 	printf("   -----------\r\n");
 	printf("    %c[%dmAL %02d-%02d%c[0m \r\n", 27, light, month, date, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSetted) {
+	if (al_isSet) {
 		if (al_isSetting) {
 			if (al_toChange == AL_HOUR) {
 				printf("  *   %c[%d;4m%02d%c[%d;24m:%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
@@ -79,14 +79,14 @@ void display_al(int month, int date, int hour, int minute) {
 // XXX ASSUMPTION: BUTTON btn; MODE mode; are global
 void alarm_mode() {
 	// alarm: Alarm Time STORAGE
-	// al_isSetted: is alarm setted?
+	// al_isSet: is alarm setted?
 
 	if ( mode != AL_MODE ) {
 /*XXX*/ //printf( "alarm_mode(): Not Alarm Mode - RETURN\r\n" );
 		return;
 	}
 
-	if (idle == 1) light = 33;
+	if (back_lighting == 1) light = 33;
 	else light = 0;
 	display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
 

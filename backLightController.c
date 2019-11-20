@@ -1,47 +1,29 @@
-#include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
-
 #include "modeController.h"
 #include "alarmController.h"
 #include "backLightController.h"
 
 
-int idle = 0; 
+int back_lighting = 0;
 
 void backLightController(int btn){
 	 	
-
 	if(isRingAlarm == 0 && btn ==4){
-		idle = 1;
+        back_lighting = 1;
 		BackLightTime.tm_sec = currentTime->tm_sec;
 		backLight();//FIXME: 이렇게 안 할 수 없을까?
 	}	
 
-	
-
-  	if(idle == 1 && currentTime->tm_sec - BackLightTime.tm_sec == 2){
+  	if(back_lighting == 1 && currentTime->tm_sec - BackLightTime.tm_sec == 2){
                 lightOff();
-		idle = 0;
+        back_lighting = 0;
         }
-	
 }
-
-
 
 void backLight(){
-	idle = 1;
+    back_lighting = 1;
 }
 
-
 void lightOff(){
-
-	idle = 0;
-
+    back_lighting = 0;
 }
 
