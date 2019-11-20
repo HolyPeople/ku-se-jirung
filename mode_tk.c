@@ -4,12 +4,12 @@
 extern MODE mode;
 extern BUTTON btn;
 extern Time* currentTime;
-extern BOOL al_isSetted; // Add for Display by harheem
+extern BOOL al_isSet; // Add for Display by harheem
 W_CH tk_toChange;	// global for display
 BOOL tk_isSetting;	// global for display
 extern Time* changeTime;
 char day[][3] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
-extern int idle;
+extern int back_lighting;
 extern int light;
 
 void switch_setting_time( ) {
@@ -101,7 +101,7 @@ void display_tk(int month, int date, int hour, int minute, int second) {
 	}
 	else printf("    %c[%dm%s %02d-%02d%c[0m \r\n", 27, light, day[currentTime->tm_wday], month, date, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSetted) {
+	if (al_isSet) {
 		if (tk_isSetting) {
 			if (tk_toChange == W_SEC) {
 				printf("  *  %c[%d;24m%02d:%02d %c[%d;4m%02d%c[0;24m \r\n\r\n", 27, light, hour, minute, 27, light, second, 27);
@@ -147,7 +147,7 @@ void timekeeping_mode( ) {
 /*XXX*/ //printf( "timekeeping_mode(): Not Timekeeping Mode - RETURN\r\n" );
                 return;
 	}
-	if (idle == 1) light = 33;
+	if (back_lighting == 1) light = 33;
 	else light = 0;
 	if (tk_isSetting == TRUE) display_tk(changeTime->tm_mon + 1, changeTime->tm_mday, changeTime->tm_hour, changeTime->tm_min, changeTime->tm_sec);
 	else display_tk(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min, currentTime->tm_sec);

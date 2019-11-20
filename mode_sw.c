@@ -11,9 +11,9 @@ sw_Time sw_lap;			// global for display
 BOOL sw_isLap = FALSE;		// global for display
 extern MODE mode;
 extern BUTTON btn;
-extern BOOL al_isSetted; // Add for Display by harheem
+extern BOOL al_isSet; // Add for Display by harheem
 extern Time* changeTime;
-extern int idle;
+extern int back_lighting;
 char light = 0;
 
 /* FUNCTION */
@@ -90,7 +90,7 @@ void display_sw(int hour, int minute, int sw_miniute, int sw_second, int sw_micr
 	printf("   -----------\r\n");
 	printf("    %c[%dmST %02d:%02d%c[0;0m \r\n", 27, light, hour, minute, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSetted) printf("  *  %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_miniute, sw_second, sw_microsecond, 27);
+	if (al_isSet) printf("  *  %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_miniute, sw_second, sw_microsecond, 27);
 	else printf("     %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_miniute, sw_second, sw_microsecond, 27);
 	printf("   -----------\r\n");
 }
@@ -113,7 +113,7 @@ void stopwatch_mode( ) {
 	}
 
 	//if LabTime is Not 00'00"00 -> Display LabTime by harheem
-	if (idle == 1) light = 33;
+	if (back_lighting == 1) light = 33;
 	else light = 0;
 	if (sw_isLap == TRUE) display_sw(currentTime->tm_hour, currentTime->tm_min, sw_lap.min, sw_lap.sec, sw_lap.centi);
 	else display_sw(currentTime->tm_hour, currentTime->tm_min, sw_time.min, sw_time.sec, sw_time.centi);
