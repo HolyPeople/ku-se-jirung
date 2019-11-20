@@ -85,13 +85,50 @@ void manual_incease_time( ) {
 }
 
 
+//W_SEC, W_HOUR, W_MIN, W_YEAR, W_MONTH, W_DAY
+
 void display_tk(int month, int date, int hour, int minute, int second) {
 	gotoxy(0, 0);
 	printf("   -----------\r\n");
-	printf("    %c[1;100m%s %02dㆍ%02d%c[0;0m \r\n", 27, day[currentTime->tm_wday] , month, date, 27);
+	if (tk_isSetting) {
+		if (tk_toChange == W_MONTH) {
+			printf("    %c[1;100m%s %c[1;100;4m%02d%c[1;100;24mㆍ%02d%c[0;0;24m \r\n", 27, day[currentTime->tm_wday], 27, month, 27, date, 27);
+		}
+		else if(tk_toChange == W_DAY) printf("    %c[1;100m%s %02dㆍ%c[1;100;4m%02d%c[0;0;24m \r\n", 27, day[currentTime->tm_wday], month, 27, date, 27);
+		else printf("    %c[1;100m%s %02dㆍ%02d%c[0;0m \r\n", 27, day[currentTime->tm_wday], month, date, 27);
+	}
+	else printf("    %c[1;100m%s %02dㆍ%02d%c[0;0m \r\n", 27, day[currentTime->tm_wday], month, date, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSetted) printf("  *  %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
-	else 	printf("     %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+	if (al_isSetted) {
+		if (tk_isSetting) {
+			if (tk_toChange == W_SEC) {
+				printf("  *  %c[1;101;24m%02d:%02d %c[1;101;4m%02d%c[0;0;24m \r\n\r\n", 27, hour, minute, 27, second, 27);
+			}
+			else if (tk_toChange == W_HOUR) {
+				printf("  *  %c[1;101;4m%02d%c[1;101;24m:%02d %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, second, 27);
+			}
+			else if (tk_toChange == W_MIN) {
+				printf("  *  %c[1;101m%02d:%c[1;101;4m%02d%c[1;101;24m %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, 27, second, 27);
+			}
+			else printf("  *  %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+		}
+		else printf("  *  %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+	}
+	else {
+		if (tk_isSetting) {
+			if (tk_toChange == W_SEC) {
+				printf("     %c[1;101;24m%02d:%02d %c[1;101;4m%02d%c[0;0;24m \r\n\r\n", 27, hour, minute, 27, second, 27);
+			}
+			else if (tk_toChange == W_HOUR) {
+				printf("     %c[1;101;4m%02d%c[1;101;24m:%02d %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, second, 27);
+			}
+			else if (tk_toChange == W_MIN) {
+				printf("     %c[1;101m%02d:%c[1;101;4m%02d%c[1;101;24m %02d%c[0;0;24m \r\n\r\n", 27, hour, 27, minute, 27, second, 27);
+			}
+			else printf("     %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+		}
+		else printf("     %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+	}
 	printf("   -----------\r\n");
 }
 
