@@ -4,9 +4,11 @@
 extern MODE mode;
 extern BUTTON btn;
 extern Time* currentTime;
+extern BOOL al_isSetted; // Add for Display by harheem
 W_CH tk_toChange;	// global for display
 BOOL tk_isSetting;	// global for display
 extern Time* changeTime;
+
 
 void switch_setting_time( ) {
 	// toChange: select what to change
@@ -83,6 +85,17 @@ void manual_incease_time( ) {
 }
 
 
+void display_tk(int month, int date, int hour, int minute, int second) {
+	gotoxy(0, 0);
+	printf("   -----------\r\n");
+	printf("    %c[1;100mSU %02dㆍ%02d%c[0;0m \r\n", 27, month, date, 27);
+	printf("  -------------\r\n\r\n");
+	if (al_isSetted) printf("  *  %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+	else 	printf("     %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
+	printf("   -----------\r\n");
+}
+
+
 
 // if BUTTON-C pressed in STOPWATCH MODE,	become TIME KEEPING MODE
 // XXX DISPLAY PROCESS 2.2.2: Time Keeping
@@ -95,6 +108,10 @@ void timekeeping_mode( ) {
 /*XXX*/ printf( "timekeeping_mode(): Not Timekeeping Mode - RETURN\r\n" );
                 return;
 	}
+
+
+	display_tk(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min, currentTime->tm_sec);
+
 
 	if ( tk_isSetting == FALSE ) {
 		// if BUTTON-C pressed in TIME KEEPING MODE,	goto ALARM MODE

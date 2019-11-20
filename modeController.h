@@ -75,3 +75,5 @@ void alarm_onoff( );    // B: 2.2.16
 void switch_setting_alarm_time( ); // C: 2.2.14
 void increase_alarm_time( );     // B: 2.2.15
 // A: ALARM SETTING MODE -> ALARM MODE
+
+
