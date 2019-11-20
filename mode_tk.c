@@ -185,6 +185,7 @@ void timekeeping_mode( ) {
 		// if BUTTON-B pressed in TIME SETTING MODE,	XXX PROCESS 2.2.5: Manual Increase Time XXX
 		if ( btn == B ) {
 			manual_incease_time();
+			time_switch(currentTime, changeTime);
 		}
 
 		// if BUTTON-A pressed in TIME SETTING MODE,	return to TIME KEEPING MODE
