@@ -8,6 +8,8 @@ extern BUTTON btn;
 extern pthread_t sw_thread;
 Time al_time;			// global for display
 BOOL al_isSetted;		// global for display
+AL_CH al_toChange;		// global for display
+BOOL al_isSetting;		// global for display
 
 /* FUNCTION */
 
@@ -18,20 +20,20 @@ void alarm_onoff() {
 /*XXX*/ printf( "alarm_onoff(): al_isSetted=%d\r\n", al_isSetted );
 }
 
-void switch_setting_alarm_time( AL_CH* toChange ) {
+void switch_setting_alarm_time() {
 	// toChange: select what to change
 	// Hour -> Minute -> Hour
 	// return: selected
 
-	*toChange = ( *toChange + 1 ) % 2;
-/*XXX*/ printf( "switch_setting_alarm_time(): tochange=%d\r\n", *toChange );
+	al_toChange = ( al_toChange + 1 ) % 2;
+/*XXX*/ printf( "switch_setting_alarm_time(): tochange=%d\r\n", al_toChange );
 }
 
-void increase_alarm_time( AL_CH toChange ) {
+void increase_alarm_time() {
 	// alarm: Alarm Time STORAGE
 	// toChange: what to change
 
-	switch( toChange ) {
+	switch( al_toChange ) {
 		case AL_HOUR:
 			al_time.tm_hour = ( al_time.tm_hour + 1 ) % 24;
 			break;
@@ -52,17 +54,12 @@ void alarm_mode() {
 	// alarm: Alarm Time STORAGE
 	// al_isSetted: is alarm setted?
 
-	/* STATIC */
-	static AL_CH toChange = AL_HOUR;	// what to change
-	static BOOL isSetting = FALSE;	// is alarm setting mode? ( or alarm mode )
-
-
 	if ( mode != AL_MODE ) {
 /*XXX*/ printf( "alarm_mode(): Not Alarm Mode - RETURN\r\n" );
 		return;
 	}
 
-	if ( isSetting == FALSE ) {
+	if ( al_isSetting == FALSE ) {
 		// if BUTTON-C pressed in ALARM MODE,	goto STOPWATCH MODE
 		if ( btn == C ) {
 	                mode = ( mode + 1 ) % 3;
@@ -79,9 +76,9 @@ void alarm_mode() {
 
 		// if BUTTON-A pressed in ALARM MODE,	become ALARM SETTING MODE
 		if ( btn == A ) {
-			isSetting = ( isSetting + 1 ) % 2;
-			toChange = AL_HOUR;
-/*XXX*/ printf( "alarm_mode(): ALARM SETTING MODE BEGIN; toChange=%d\r\n", toChange );
+			al_isSetting = ( al_isSetting + 1 ) % 2;
+			al_toChange = AL_HOUR;
+/*XXX*/ printf( "alarm_mode(): ALARM SETTING MODE BEGIN; toChange=%d\r\n", al_toChange );
 		}
 		// XXX DISPLAY - PROCESS 2.2.12: Alarm Setting ( toChange )
 	}
@@ -94,17 +91,17 @@ void alarm_mode() {
 	else {
 		// if BUTTON-C pressed in ALARM SETTING MODE,	XXX PROCESS 2.2.14: Switch Setting Alarm Time XXX
 		if ( btn == C )	{
-			switch_setting_alarm_time( &toChange );
+			switch_setting_alarm_time();
 		}
 
 		// if BUTTON-B pressed in ALARM SETTING MODE,	XXX PROCESS 2.2.15: Increase Alarm Time XXX
 		if ( btn == B )	{
-			increase_alarm_time( toChange );
+			increase_alarm_time();
 		}
 
 		// if BUTTON-A pressed in ALARM SETTING MODE,	become ALARM MODE
 		if ( btn == A ) {
-			isSetting = ( isSetting + 1 ) % 2;
+			al_isSetting = ( al_isSetting + 1 ) % 2;
 			// XXX DISPLAY PROCESS 2.2.13: Alarm
 /*XXX*/ printf( "alarm_mode(): ALARM MODE BEGIN\r\n" );
 		}
