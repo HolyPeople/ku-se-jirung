@@ -50,8 +50,24 @@ void display_al(int month, int date, int hour, int minute) {
 	printf("   -----------\r\n");
 	printf("    %c[1;100mAL %02dㆍ%02d%c[0;0m \r\n", 27, month, date, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSetted) printf("  *   %c[1;101m%02d:%02d%c[0;0m     \r\n\r\n", 27, hour, minute, 27);
-	else printf("      %c[1;101m%02d:%02d%c[0;0m     \r\n\r\n", 27, hour, minute, 27);
+	if (al_isSetted) {
+		if (al_isSetting) {
+			if (al_toChange == AL_HOUR) {
+				printf("  *   %c[1;101;4m%02d%c[1;101;24m:%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+			}
+			else printf("  *   %c[1;101;24m%02d:%c[1;101;4m%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+		}
+		else printf("  *   %c[1;101m%02d:%02d%c[0;0m     \r\n\r\n", 27, hour, minute, 27);
+	}
+	else {
+		if (al_isSetting) {
+			if (al_toChange == AL_HOUR) {
+				printf("      %c[1;101;4m%02d%c[1;101;24m:%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+			}
+			else printf("      %c[1;101m%02d:%c[1;101;4m%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+		}
+		else printf("      %c[1;101m%02d:%02d%c[0;0m     \r\n\r\n", 27, hour, minute, 27);
+	}
 	printf("   -----------\r\n");
 }
 
@@ -68,8 +84,7 @@ void alarm_mode() {
 		return;
 	}
 	
-	if( al_isSetting == FALSE ) display_al(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min);
-	else display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
+	 display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
 
 	if ( al_isSetting == FALSE ) {
 		// if BUTTON-C pressed in ALARM MODE,	goto STOPWATCH MODE
