@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 //        if ( btn)
 //            printf("%d\r\n", btn);
         alarmController();
-        backLightController(btn);
+        backLightController();
         modeController();
 
     }

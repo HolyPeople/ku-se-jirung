@@ -6,7 +6,7 @@ extern MODE mode;
 
 void modeController(  ) {
 
-	currentTime = autoIncreaseTime(currentTime);
+	autoIncreaseTime();
 	if ( mode == TK_MODE )
 		timekeeping_mode();
 	else if ( mode == AL_MODE )
@@ -16,7 +16,7 @@ void modeController(  ) {
 }
 
 
-Time* autoIncreaseTime(Time* currentTime) {
+void autoIncreaseTime() {
 	
 //	static clock_t p_clock = 0;
 //	clock_t c_clock = clock();
@@ -33,7 +33,7 @@ Time* autoIncreaseTime(Time* currentTime) {
 	time_t t = mktime(currentTime);
 
 //	if (c_clock - p_clock >= CLOCKS_PER_SEC) {
-	if ( ( c_clock.tv_sec * 1000000000 + c_clock.tv_nsec ) - ( p_clock.tv_sec * 1000000000 + p_clock.tv_nsec ) >= 1000000000 ) {
+	if ( ( c_clock.tv_sec * 1000000000 + c_clock.tv_nsec ) - ( p_clock.tv_sec * 1000000000 + p_clock.tv_nsec ) > 1000000000 ) {
 		/* In One Second */
 		if (t == 4102412399)
 		    t = 1546268399;
@@ -56,5 +56,5 @@ Time* autoIncreaseTime(Time* currentTime) {
 
 	}
 
-	return localtime(&t);
+	currentTime = localtime(&t);
 }	
