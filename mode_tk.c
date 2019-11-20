@@ -6,6 +6,7 @@ extern BUTTON btn;
 extern Time* currentTime;
 W_CH tk_toChange;	// global for display
 BOOL tk_isSetting;	// global for display
+extern Time* changeTime;
 
 void switch_setting_time( ) {
 	// toChange: select what to change
@@ -24,26 +25,26 @@ void manual_incease_time( ) {
 
 	switch ( tk_toChange ) {
 		case W_SEC:
-			currentTime->tm_sec = ( currentTime->tm_sec + 1 ) % 60;
+			changeTime->tm_sec = ( changeTime->tm_sec + 1 ) % 60;
 			break;
 		case W_HOUR:
-			currentTime->tm_hour = ( currentTime->tm_hour + 1 ) % 24;
+			changeTime->tm_hour = ( changeTime->tm_hour + 1 ) % 24;
 			break;
 		case W_MIN:
-			currentTime->tm_min = ( currentTime->tm_min + 1 ) % 60;
+			changeTime->tm_min = ( changeTime->tm_min + 1 ) % 60;
 			break;
 		case W_YEAR:
-			currentTime->tm_year++;
-			if ( currentTime->tm_year > 199 )	// year > 2099
-				currentTime->tm_year = 119;	// year := 2019
+			changeTime->tm_year++;
+			if ( changeTime->tm_year > 199 )	// year > 2099
+				changeTime->tm_year = 119;	// year := 2019
 			break;
 		case W_MONTH:
-			currentTime->tm_mon = ( currentTime->tm_mon + 1 ) % 12;
+			changeTime->tm_mon = ( changeTime->tm_mon + 1 ) % 12;
 			break;
 		case W_DAY:
-			day = currentTime->tm_mday + 1;
+			day = changeTime->tm_mday + 1;
 
-			switch( currentTime->tm_mon ) {
+			switch( changeTime->tm_mon ) {
 				case 0:
 				case 2:
 				case 4:
@@ -52,33 +53,33 @@ void manual_incease_time( ) {
 				case 9:
 				case 11:
 					if ( day > 31 )
-						currentTime->tm_mday = 1;
+						changeTime->tm_mday = 1;
 					else
-						currentTime->tm_mday = day;
+						changeTime->tm_mday = day;
 					break;
 				case 1:
-					year = currentTime->tm_year;
+					year = changeTime->tm_year;
 					if ( ( !( year % 4 ) && ( year % 100 ) ) || !( year % 400 ) ) {
 						if ( day > 29 )
-							currentTime->tm_mday = 1;
+							changeTime->tm_mday = 1;
 						else
-							currentTime->tm_mday = day;
+							changeTime->tm_mday = day;
 					}
 					else {
 						if ( day > 28 )
-							currentTime->tm_mday = 1;
+							changeTime->tm_mday = 1;
 						else
-							currentTime->tm_mday = day;
+							changeTime->tm_mday = day;
 					}
 					break;
 				default:
 						if ( day > 30 )
-							currentTime->tm_mday = 1;
+							changeTime->tm_mday = 1;
 						else
-							currentTime->tm_mday = day;
+							changeTime->tm_mday = day;
 			}
 	}
-/*XXX*/ printf( "manual_increase_time(): Time=%d/%d/%d %d:%d:%d\r\n", currentTime->tm_year+1900, currentTime->tm_mon+1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min, currentTime->tm_sec );
+/*XXX*/ printf( "manual_increase_time(): Time=%d/%d/%d %d:%d:%d\r\n", changeTime->tm_year+1900, changeTime->tm_mon+1, changeTime->tm_mday, changeTime->tm_hour, changeTime->tm_min, changeTime->tm_sec );
 }
 
 
@@ -140,4 +141,9 @@ void timekeeping_mode( ) {
 	}
 
 	btn = NONE;
+}
+
+
+void time_switch( Time* dst, Time* src ) {
+	memcpy( dst, src, sizeof( Time ) );
 }
