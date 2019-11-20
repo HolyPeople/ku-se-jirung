@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 
 # project settings
-project(DIGITAL_WATCH LANGUAGES C)
+PROJECT(DIGITAL_WATCH LANGUAGES C)
 set(CMAKE_C_STANDARD 11)
 
 # create common variable

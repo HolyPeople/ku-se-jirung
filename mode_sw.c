@@ -12,6 +12,7 @@ BOOL sw_isLap = FALSE;		// global for display
 extern MODE mode;
 extern BUTTON btn;
 extern BOOL al_isSetted; // Add for Display by harheem
+extern Time* changeTime;
 
 /* FUNCTION */
 

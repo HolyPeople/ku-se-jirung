@@ -7,6 +7,7 @@
 
 typedef struct tm Time;
 Time* currentTime;
+Time* changeTime;
 
 typedef enum _MODE {
         TK_MODE, AL_MODE, SW_MODE
@@ -37,6 +38,8 @@ void modeController( );
 
 Time* autoIncreaseTime(Time* currentTime);
 
+void time_switch( Time* dst, Time* src );
+
 /* function in mode_tk.c */
 void timekeeping_mode( );
 // C: goto ALARM MODE
@@ -46,8 +49,8 @@ void timekeeping_mode( );
  * △ Time Keeping Mode *
  * ▽ Time Setting Mode *
  ***********************/
-void switch_setting_time( W_CH* toChange );     // C: 2.2.4
-void manual_incease_time( W_CH toChange );       // B: 2.2.5
+void switch_setting_time( );     // C: 2.2.4
+void manual_incease_time( );       // B: 2.2.5
 // A: TIME SETTING MODE -> TIME KEEPING MODE
 
 /* function in mode_sw.c */
@@ -69,8 +72,8 @@ void alarm_onoff( );    // B: 2.2.16
  * △ Alarm Mode         *
  * ▽ Alarm Setting Mode *
  ************************/
-void switch_setting_alarm_time( AL_CH* toChange ); // C: 2.2.14
-void increase_alarm_time( AL_CH toChange );     // B: 2.2.15
+void switch_setting_alarm_time( ); // C: 2.2.14
+void increase_alarm_time( );     // B: 2.2.15
 // A: ALARM SETTING MODE -> ALARM MODE
 
 
