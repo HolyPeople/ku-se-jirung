@@ -85,13 +85,13 @@ void stopwatch_reset( ) {
 }
 
 
-void display_sw(int hour, int minute, int sw_miniute, int sw_second, int sw_microsecond) {
+void display_sw(int hour, int minute, int sw_minute, int sw_second, int sw_microsecond) {
 	gotoxy(0, 0);
 	printf("   -----------\r\n");
 	printf("    %c[%dmST %02d:%02d%c[0;0m \r\n", 27, light, hour, minute, 27);
 	printf("  -------------\r\n\r\n");
-	if (al_isSet) printf("  *  %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_miniute, sw_second, sw_microsecond, 27);
-	else printf("     %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_miniute, sw_second, sw_microsecond, 27);
+	if (al_isSet) printf("  *  %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_minute, sw_second, sw_microsecond, 27);
+	else printf("     %c[%dm%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, light, sw_minute, sw_second, sw_microsecond, 27);
 	printf("   -----------\r\n");
 }
 
