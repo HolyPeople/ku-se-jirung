@@ -10,6 +10,8 @@ Time al_time;			// global for display
 BOOL al_isSetted;		// global for display
 AL_CH al_toChange;		// global for display
 BOOL al_isSetting;		// global for display
+extern int idle;
+extern int light;
 
 /* FUNCTION */
 
@@ -27,7 +29,7 @@ void switch_setting_alarm_time() {
 
 
 	al_toChange = ( al_toChange + 1 ) % 2;
-/*XXX*/ printf( "switch_setting_alarm_time(): tochange=%d\r\n", al_toChange );
+/*XXX*/ //printf( "switch_setting_alarm_time(): tochange=%d\r\n", al_toChange );
 }
 
 void increase_alarm_time() {
@@ -48,25 +50,25 @@ void increase_alarm_time() {
 void display_al(int month, int date, int hour, int minute) {
 	gotoxy(0, 0);
 	printf("   -----------\r\n");
-	printf("    %c[1;100mAL %02dㆍ%02d%c[0;0m \r\n", 27, month, date, 27);
+	printf("    %c[%dmAL %02d-%02d%c[0m \r\n", 27, light, month, date, 27);
 	printf("  -------------\r\n\r\n");
 	if (al_isSetted) {
 		if (al_isSetting) {
 			if (al_toChange == AL_HOUR) {
-				printf("  *   %c[1;101;4m%02d%c[1;101;24m:%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+				printf("  *   %c[%d;4m%02d%c[%d;24m:%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
 			}
-			else printf("  *   %c[1;101;24m%02d:%c[1;101;4m%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+			else printf("  *   %c[%d;24m%02d:%c[%d;4m%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
 		}
-		else printf("  *   %c[1;101m%02d:%02d%c[0;0m     \r\n\r\n", 27, hour, minute, 27);
+		else printf("  *   %c[%dm%02d:%02d%c[0m     \r\n\r\n", 27, light, hour, minute, 27);
 	}
 	else {
 		if (al_isSetting) {
 			if (al_toChange == AL_HOUR) {
-				printf("      %c[1;101;4m%02d%c[1;101;24m:%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+				printf("      %c[%d;4m%02d%c[%d;24m:%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
 			}
-			else printf("      %c[1;101m%02d:%c[1;101;4m%02d%c[0;0m     \r\n\r\n", 27, hour, 27, minute, 27);
+			else printf("      %c[%d;24m%02d:%c[%d;4m%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
 		}
-		else printf("      %c[1;101m%02d:%02d%c[0;0m     \r\n\r\n", 27, hour, minute, 27);
+		else printf("      %c[%dm%02d:%02d%c[0m     \r\n\r\n", 27, light, hour, minute, 27);
 	}
 	printf("   -----------\r\n");
 }
@@ -83,8 +85,10 @@ void alarm_mode() {
 /*XXX*/ //printf( "alarm_mode(): Not Alarm Mode - RETURN\r\n" );
 		return;
 	}
-	
-	 display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
+
+	if (idle == 1) light = 33;
+	else light = 0;
+	display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
 
 	if ( al_isSetting == FALSE ) {
 		// if BUTTON-C pressed in ALARM MODE,	goto STOPWATCH MODE
@@ -105,7 +109,7 @@ void alarm_mode() {
 		if ( btn == A ) {
 			al_isSetting = ( al_isSetting + 1 ) % 2;
 			al_toChange = AL_HOUR;
-/*XXX*/ printf( "alarm_mode(): ALARM SETTING MODE BEGIN; toChange=%d\r\n", al_toChange );
+/*XXX*/ //printf( "alarm_mode(): ALARM SETTING MODE BEGIN; toChange=%d\r\n", al_toChange );
 		}
 		// XXX DISPLAY - PROCESS 2.2.12: Alarm Setting ( toChange )
 	}
