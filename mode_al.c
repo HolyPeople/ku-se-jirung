@@ -83,7 +83,7 @@ void alarm_mode() {
 /*XXX*/ //printf( "alarm_mode(): Not Alarm Mode - RETURN\r\n" );
 		return;
 	}
-	
+
 	 display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
 
 	if ( al_isSetting == FALSE ) {

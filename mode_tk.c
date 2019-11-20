@@ -103,7 +103,7 @@ void display_tk(int month, int date, int hour, int minute, int second) {
 // XXX ASSUMPTION: BUTTON btn; MODE mode; are global
 void timekeeping_mode( ) {
 	// currentTime: Current Time Storage
-	
+
 	if ( mode != TK_MODE ) {
 /*XXX*/ //printf( "timekeeping_mode(): Not Timekeeping Mode - RETURN\r\n" );
                 return;
