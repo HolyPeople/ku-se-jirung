@@ -47,28 +47,28 @@ void increase_alarm_time() {
 /*XXX*/ //printf( "increase_alarm_time(): Alarm=%d:%d\r\n", al_time.tm_hour, al_time.tm_min );
 }
 
-void display_al(int month, int date, int hour, int minute) {
+void display_al() {
 	gotoxy(0, 0);
 	printf("   -----------\r\n");
-	printf("    %c[%dmAL %02d-%02d%c[0m \r\n", 27, light, month, date, 27);
+	printf("    %c[%dmAL %02d-%02d%c[0m \r\n", 27, light, currentTime->tm_mon + 1, currentTime->tm_mday, 27);
 	printf("  -------------\r\n\r\n");
 	if (al_isSet) {
 		if (al_isSetting) {
 			if (al_toChange == AL_HOUR) {
-				printf("  *   %c[%d;4m%02d%c[%d;24m:%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
+				printf("  *   %c[%d;4m%02d%c[%d;24m:%02d%c[0;0m     \r\n\r\n", 27, light, al_time.tm_hour, 27, light, al_time.tm_min, 27);
 			}
-			else printf("  *   %c[%d;24m%02d:%c[%d;4m%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
+			else printf("  *   %c[%d;24m%02d:%c[%d;4m%02d%c[0;0m     \r\n\r\n", 27, light, al_time.tm_hour, 27, light, al_time.tm_min, 27);
 		}
-		else printf("  *   %c[%dm%02d:%02d%c[0m     \r\n\r\n", 27, light, hour, minute, 27);
-	}
+		else printf("  *   %c[%dm%02d:%02d%c[0m     \r\n\r\n", 27, light, al_time.tm_hour, al_time.tm_min, 27);
+}
 	else {
 		if (al_isSetting) {
 			if (al_toChange == AL_HOUR) {
-				printf("      %c[%d;4m%02d%c[%d;24m:%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
+				printf("      %c[%d;4m%02d%c[%d;24m:%02d%c[0;0m     \r\n\r\n", 27, light, al_time.tm_hour, 27, light, al_time.tm_min, 27);
 			}
-			else printf("      %c[%d;24m%02d:%c[%d;4m%02d%c[0;0m     \r\n\r\n", 27, light, hour, 27, light, minute, 27);
+			else printf("      %c[%d;24m%02d:%c[%d;4m%02d%c[0;0m     \r\n\r\n", 27, light, al_time.tm_hour, 27, light, al_time.tm_min, 27);
 		}
-		else printf("      %c[%dm%02d:%02d%c[0m     \r\n\r\n", 27, light, hour, minute, 27);
+		else printf("      %c[%dm%02d:%02d%c[0m     \r\n\r\n", 27, light, al_time.tm_hour, al_time.tm_min, 27);
 	}
 	printf("   -----------\r\n");
 }
@@ -88,7 +88,7 @@ void alarm_mode() {
 
 	if (back_lighting == 1) light = 33;
 	else light = 0;
-	display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
+	display_al();
 
 	if ( al_isSetting == FALSE ) {
 		// if BUTTON-C pressed in ALARM MODE,	goto STOPWATCH MODE
