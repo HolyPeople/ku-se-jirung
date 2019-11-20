@@ -151,6 +151,7 @@ void timekeeping_mode( ) {
 
 		// if BUTTON-A pressed in TIME SETTING MODE,	return to TIME KEEPING MODE
 		if ( btn == A ) {
+			time_switch( currentTime, changeTime );
 			tk_isSetting = ( tk_isSetting + 1 ) % 2;
 /*XXX*/ //printf( "timekeeping_mode(): TIME SETTING MODE END; toChange=%d\r\n", tk_toChange );
 			// XXX DISPLAY - PROCESS 2.2.2: Time Keeping ( currentTime )
