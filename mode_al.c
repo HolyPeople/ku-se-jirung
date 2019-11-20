@@ -68,7 +68,7 @@ void alarm_mode() {
 		return;
 	}
 	
-	if( isSetting == FALSE ) display_al(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min);
+	if( al_isSetting == FALSE ) display_al(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min);
 	else display_al(currentTime->tm_mon + 1, currentTime->tm_mday, al_time.tm_hour, al_time.tm_min);
 
 	if ( al_isSetting == FALSE ) {
