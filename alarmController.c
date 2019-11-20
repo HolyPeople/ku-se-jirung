@@ -1,17 +1,8 @@
-#include <stdio.h>
-#include <time.h>
-#include <stdbool.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include <pthread.h>
 #include "conio.h"
 #include "modeController.h"
 #include "alarmController.h"
-
-#if !(WIN32)
-#define Beep(x,y)
-#endif
-
 
 extern BUTTON btn;
 extern Time al_time;                   // global for display
@@ -19,65 +10,49 @@ extern BOOL al_isSetted;               // global for display
 
 
 void ringOff() {
-        isRingAlarm = 0;
-	
+    isRingAlarm = 0;
 }
 
-
-void* ringAlarm(void* arg) {
-	
-        isRingAlarm = 1;
-	Beep(523,100);
-	//is need delete thread??
- 	       
+void *ringAlarm(void* args) {
+    struct timespec now, from;
+    printf("ringAlarm() : is Created!\r\n");
+    while (1) {
+        clock_gettime( CLOCK_MONOTONIC, &from);
+        if (isRingAlarm)
+            system("echo -e '\a'");
+        while (isRingAlarm) {
+            clock_gettime( CLOCK_MONOTONIC, &now );
+            if ( ( now.tv_sec * 1000000000 + now.tv_nsec )
+                 - ( from.tv_sec * 1000000000 + from.tv_nsec ) >= 1000000000 ) {
+                system("echo -e '\a'");
+                printf("ringAlarm() : ring\r\n");
+                clock_gettime( CLOCK_MONOTONIC, &from );
+            }
+        }
+    }
 }
 
 int check_Alarm_Time(){
 
- 	if(al_isSetted == FALSE) return 0;
-	
-
-
-	else if (al_time.tm_min== currentTime->tm_min && al_time.tm_hour== currentTime->tm_hour && 0 == currentTime->tm_sec )
-			
-	{
-		trigger = 1;
-		return trigger;
-	}
-
+    if (al_isSetted == TRUE
+            && (al_time.tm_min== currentTime->tm_min && al_time.tm_hour== currentTime->tm_hour && 0 == currentTime->tm_sec ))
+        return 1;
+    else
+        return 0;
 }
-
-
-
-
 
 int alarmController( ) {
 
-	//Beep때문에 쓰레드를 쓰려고 합니다.
-	pthread_t p_thread[1];
-	
-
-	check_Alarm_Time();
-	
-	
-	if(trigger == 1) pthread_create(&p_thread[0], NULL, ringAlarm,NULL);
-
-	else {
-		ringOff();
-
-	}
+    if (!isRingAlarm && check_Alarm_Time()) {
+        printf("alarmController() : change isRingAlarm%d\r\n", isRingAlarm);
+        isRingAlarm = 1;
+    }
 
 
-
-
-	if((btn ==1 || btn == 2 || btn == 3 || btn == 4)||(currentTime->tm_sec >= 5))
-        {
-                trigger = 0;
-        }
-
-
-
-
-
+    if( isRingAlarm && ((btn ==1 || btn == 2 || btn == 3 || btn == 4)||(currentTime->tm_sec >= 5))) {
+        ringOff();
+        isRingAlarm = 0;
+        btn = NONE;
+    }
 
 }

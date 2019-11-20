@@ -37,7 +37,7 @@ void *sw_increase( void* arg ) {
 				pthread_mutex_lock( &sw_mtx );
 				sw_time.centi++;
 /*XXX*/	//printf( "sw_increase(): %d:%d:%d\r\n", sw_time.min, sw_time.sec, sw_time.centi );
-		
+
 				if ( sw_time.centi >= 100 ) {
 					sw_time.centi -= 100;
 					sw_time.sec++;
@@ -61,7 +61,7 @@ void record_laptime( ) {
 	// sw_time: increasing stopwatch time
 	// sw_lap: laptime for display
 	// sw_isLap: is laptime on display?
-	
+
 	sw_isLap = TRUE;
 	pthread_mutex_lock( &sw_mtx );
         memcpy( &sw_lap, &sw_time, sizeof( sw_Time ) );
@@ -106,7 +106,7 @@ void stopwatch_mode( ) {
 	// sw_isLap: is laptime on display? -> global for display
 	// sw_isWork: is stopwatch work?
 	// sw_thread: thread for increment
-	
+
 	if ( mode != SW_MODE ) {
 /*XXX*/ //printf( "stopwatch_mode(): Not Stopwatch Mode - RETURN\r\n" );
         return;
