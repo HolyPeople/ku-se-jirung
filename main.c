@@ -17,6 +17,8 @@
 /* GLOBAL */
 MODE mode = TK_MODE;
 BUTTON btn = NONE;
+extern BOOL tk_isSetting;
+extern BOOL al_isSetting;
 
 /* main function */
 int main(int argc, char *argv[]) {	
@@ -28,6 +30,9 @@ int main(int argc, char *argv[]) {
         BOOL alarmSet = FALSE;
 
 	MODE mode = TK_MODE;
+
+	tk_isSetting = FALSE;
+	al_isSetting = FALSE;
 
 
 	system("clear");

@@ -4,24 +4,26 @@
 extern MODE mode;
 extern BUTTON btn;
 extern Time* currentTime;
+W_CH tk_toChange;	// global for display
+BOOL tk_isSetting;	// global for display
 extern Time* changeTime;
 
-void switch_setting_time( W_CH* toChange ) {
+void switch_setting_time( ) {
 	// toChange: select what to change
 	// Second -> Hour -> Minute -> Year -> Month -> Day -> Second
 
-	*toChange =  ( *toChange + 1 ) % 6;
-/*XXX*/ printf( "switch_setting_time(): tochange=%d\r\n", *toChange );
+	tk_toChange =  ( tk_toChange + 1 ) % 6;
+/*XXX*/ printf( "switch_setting_time(): tochange=%d\r\n", tk_toChange );
 }
 
-void manual_incease_time( W_CH toChange ) {
+void manual_incease_time( ) {
 	// currentTime: Current Time tm STORAGE
 	// toChange: what to change
 
 	int year = 0;	// for OPT
 	int day = 0;	// for day++
 
-	switch ( toChange ) {
+	switch ( tk_toChange ) {
 		case W_SEC:
 			changeTime->tm_sec = ( changeTime->tm_sec + 1 ) % 60;
 			break;
@@ -89,15 +91,12 @@ void manual_incease_time( W_CH toChange ) {
 void timekeeping_mode( ) {
 	// currentTime: Current Time Storage
 	
-	static W_CH toChange = W_SEC; // what to change
-	static BOOL isSetting = FALSE; // is time Setting mode? ( or time keeping? )
-	
 	if ( mode != TK_MODE ) {
 /*XXX*/ printf( "timekeeping_mode(): Not Timekeeping Mode - RETURN\r\n" );
                 return;
 	}
 
-	if ( isSetting == FALSE ) {
+	if ( tk_isSetting == FALSE ) {
 		// if BUTTON-C pressed in TIME KEEPING MODE,	goto ALARM MODE
 		if ( btn == C ) {
 			mode = ( mode + 1 ) % 3;
@@ -110,10 +109,9 @@ void timekeeping_mode( ) {
 
 		// if BUTTON-A pressed in TIME KEEPING MODE,	become TIME SETTING MODE
 		if ( btn == A ) {
-			isSetting = ( isSetting + 1 ) % 2;
-			time_switch( changeTime, currentTime );
-			toChange = W_SEC;
-/*XXX*/ printf( "timekeeping_mode(): TIME SETTING MODE BEGIN; toChange=%d\r\n", toChange );
+			tk_isSetting = ( tk_isSetting + 1 ) % 2;
+			tk_toChange = W_SEC;
+/*XXX*/ printf( "timekeeping_mode(): TIME SETTING MODE BEGIN; toChange=%d\r\n", tk_toChange );
 		}
 		// XXX DISPLAY - PROCESS 2.2.3: struct tm Setting ( toChange )
 	}
@@ -126,19 +124,18 @@ void timekeeping_mode( ) {
 	else {
 		// if BUTTON-C pressed in TIME SETTING MODE,	XXX PROCESS 2.2.4: Switch Setting Time XXX
 		if ( btn == C ) {
-			switch_setting_time( &toChange );
+			switch_setting_time();
 		}
 
 		// if BUTTON-B pressed in TIME SETTING MODE,	XXX PROCESS 2.2.5: Manual Increase Time XXX
 		if ( btn == B ) {
-			manual_incease_time( toChange );
+			manual_incease_time();
 		}
 
 		// if BUTTON-A pressed in TIME SETTING MODE,	return to TIME KEEPING MODE
 		if ( btn == A ) {
-			isSetting = ( isSetting + 1 ) % 2;
-			time_switch( currentTime, changeTime );
-/*XXX*/ printf( "timekeeping_mode(): TIME SETTING MODE END; toChange=%d\r\n", toChange );
+			tk_isSetting = ( tk_isSetting + 1 ) % 2;
+/*XXX*/ printf( "timekeeping_mode(): TIME SETTING MODE END; toChange=%d\r\n", tk_toChange );
 			// XXX DISPLAY - PROCESS 2.2.2: Time Keeping ( currentTime )
 		}
 	}
