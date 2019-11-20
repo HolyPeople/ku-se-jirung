@@ -89,7 +89,7 @@ void display_sw(int hour, int minute, int sw_miniute, int sw_second, int sw_micr
 	printf("    %c[1;100mST %02d:%02d%c[0;0m \r\n", 27, hour, minute, 27);
 	printf("  -------------\r\n\r\n");
 	if (al_isSetted) printf("  *  %c[1;101m%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, sw_miniute, sw_second, sw_microsecond, 27);
-	printf("     %c[1;101m%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, sw_miniute, sw_second, sw_microsecond, 27);
+	else printf("     %c[1;101m%02d'%02d\"%02d%c[0;0m \r\n\r\n", 27, sw_miniute, sw_second, sw_microsecond, 27);
 	printf("   -----------\r\n");
 }
 
