@@ -8,14 +8,14 @@ extern BOOL al_isSetted; // Add for Display by harheem
 W_CH tk_toChange;	// global for display
 BOOL tk_isSetting;	// global for display
 extern Time* changeTime;
-
+char day[][3] = { "SU", "MO", "TU", "WE", "TH", "FR", "SA" };
 
 void switch_setting_time( ) {
 	// toChange: select what to change
 	// Second -> Hour -> Minute -> Year -> Month -> Day -> Second
 
 	tk_toChange =  ( tk_toChange + 1 ) % 6;
-/*XXX*/ printf( "switch_setting_time(): tochange=%d\r\n", tk_toChange );
+/*XXX*/ //printf( "switch_setting_time(): tochange=%d\r\n", tk_toChange );
 }
 
 void manual_incease_time( ) {
@@ -81,14 +81,14 @@ void manual_incease_time( ) {
 							changeTime->tm_mday = day;
 			}
 	}
-/*XXX*/ printf( "manual_increase_time(): Time=%d/%d/%d %d:%d:%d\r\n", changeTime->tm_year+1900, changeTime->tm_mon+1, changeTime->tm_mday, changeTime->tm_hour, changeTime->tm_min, changeTime->tm_sec );
+/*XXX*/ //printf( "manual_increase_time(): Time=%d/%d/%d %d:%d:%d\r\n", changeTime->tm_year+1900, changeTime->tm_mon+1, changeTime->tm_mday, changeTime->tm_hour, changeTime->tm_min, changeTime->tm_sec );
 }
 
 
 void display_tk(int month, int date, int hour, int minute, int second) {
 	gotoxy(0, 0);
 	printf("   -----------\r\n");
-	printf("    %c[1;100mSU %02dㆍ%02d%c[0;0m \r\n", 27, month, date, 27);
+	printf("    %c[1;100m%s %02dㆍ%02d%c[0;0m \r\n", 27, day[currentTime->tm_wday] , month, date, 27);
 	printf("  -------------\r\n\r\n");
 	if (al_isSetted) printf("  *  %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
 	else 	printf("     %c[1;101m%02d:%02d %02d%c[0;0m \r\n\r\n", 27, hour, minute, second, 27);
@@ -105,19 +105,19 @@ void timekeeping_mode( ) {
 	// currentTime: Current Time Storage
 	
 	if ( mode != TK_MODE ) {
-/*XXX*/ printf( "timekeeping_mode(): Not Timekeeping Mode - RETURN\r\n" );
+/*XXX*/ //printf( "timekeeping_mode(): Not Timekeeping Mode - RETURN\r\n" );
                 return;
 	}
 
-
-	display_tk(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min, currentTime->tm_sec);
+	if (tk_isSetting == TRUE) display_tk(changeTime->tm_mon + 1, changeTime->tm_mday, changeTime->tm_hour, changeTime->tm_min, changeTime->tm_sec);
+	else display_tk(currentTime->tm_mon + 1, currentTime->tm_mday, currentTime->tm_hour, currentTime->tm_min, currentTime->tm_sec);
 
 
 	if ( tk_isSetting == FALSE ) {
 		// if BUTTON-C pressed in TIME KEEPING MODE,	goto ALARM MODE
 		if ( btn == C ) {
 			mode = ( mode + 1 ) % 3;
-/*XXX*/ printf( "timekeeping_mode(): Mode Change - AL; RETURN\r\n" );
+/*XXX*/ //printf( "timekeeping_mode(): Mode Change - AL; RETURN\r\n" );
 			btn = NONE;
                         return;
                 }
@@ -128,7 +128,7 @@ void timekeeping_mode( ) {
 		if ( btn == A ) {
 			tk_isSetting = ( tk_isSetting + 1 ) % 2;
 			tk_toChange = W_SEC;
-/*XXX*/ printf( "timekeeping_mode(): TIME SETTING MODE BEGIN; toChange=%d\r\n", tk_toChange );
+/*XXX*/ //printf( "timekeeping_mode(): TIME SETTING MODE BEGIN; toChange=%d\r\n", tk_toChange );
 		}
 		// XXX DISPLAY - PROCESS 2.2.3: struct tm Setting ( toChange )
 	}
@@ -152,7 +152,7 @@ void timekeeping_mode( ) {
 		// if BUTTON-A pressed in TIME SETTING MODE,	return to TIME KEEPING MODE
 		if ( btn == A ) {
 			tk_isSetting = ( tk_isSetting + 1 ) % 2;
-/*XXX*/ printf( "timekeeping_mode(): TIME SETTING MODE END; toChange=%d\r\n", tk_toChange );
+/*XXX*/ //printf( "timekeeping_mode(): TIME SETTING MODE END; toChange=%d\r\n", tk_toChange );
 			// XXX DISPLAY - PROCESS 2.2.2: Time Keeping ( currentTime )
 		}
 	}
