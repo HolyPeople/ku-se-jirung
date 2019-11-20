@@ -110,7 +110,7 @@ void stopwatch_mode( ) {
 	}
 
 	//if LabTime is Not 00'00"00 -> Display LabTime by harheem
-	if (sw_lap.centi || sw_lap.min || sw_lap.sec) display_sw(currentTime->tm_hour, currentTime->tm_min, sw_lap.min, sw_lap.sec, sw_lap.centi);
+	if (sw_isLap == TRUE) display_sw(currentTime->tm_hour, currentTime->tm_min, sw_lap.min, sw_lap.sec, sw_lap.centi);
 	else display_sw(currentTime->tm_hour, currentTime->tm_min, sw_time.min, sw_time.sec, sw_time.centi);
 
 	// if BUTTON-C pressed && !sw_isWork,	goto TIME KEEPING MODE
