@@ -126,6 +126,7 @@ void timekeeping_mode( ) {
 
 		// if BUTTON-A pressed in TIME KEEPING MODE,	become TIME SETTING MODE
 		if ( btn == A ) {
+			time_switch( changeTime, currentTime );
 			tk_isSetting = ( tk_isSetting + 1 ) % 2;
 			tk_toChange = W_SEC;
 /*XXX*/ //printf( "timekeeping_mode(): TIME SETTING MODE BEGIN; toChange=%d\r\n", tk_toChange );
