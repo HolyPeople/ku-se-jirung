@@ -32,7 +32,8 @@ int main(int argc, char *argv[]) {
     pthread_create(&alarm_ctr, NULL, ringAlarm, NULL);
     set_conio_terminal_mode();
     while (1) {
-//        if ( btn = pushedButtonDector())
+        btn = pushedButtonDector();
+//        if ( btn)
 //            printf("%d\r\n", btn);
         alarmController();
         backLightController(btn);
