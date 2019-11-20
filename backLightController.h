@@ -8,10 +8,9 @@
 struct tm BackLightTime;
 
 
-void backLightController(int btn);
+void backLightController();
 
 void backLight();
-
 
 void lightOff();
 

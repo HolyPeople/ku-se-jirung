@@ -36,7 +36,7 @@ typedef struct time_sw {
 
 void modeController( );
 
-Time* autoIncreaseTime(Time* currentTime);
+void autoIncreaseTime();
 
 void time_switch( Time* dst, Time* src );
 

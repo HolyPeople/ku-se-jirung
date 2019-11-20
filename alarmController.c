@@ -23,7 +23,7 @@ void *ringAlarm(void* args) {
         while (isRingAlarm) {
             clock_gettime( CLOCK_MONOTONIC, &now );
             if ( ( now.tv_sec * 1000000000 + now.tv_nsec )
-                 - ( from.tv_sec * 1000000000 + from.tv_nsec ) >= 1000000000 ) {
+                 - ( from.tv_sec * 1000000000 + from.tv_nsec ) > 999999999 ) {
                 system("echo -e '\a'");
                 /*XXX*///printf("ringAlarm() : ring\r\n");
                 clock_gettime( CLOCK_MONOTONIC, &from );
@@ -34,11 +34,13 @@ void *ringAlarm(void* args) {
 
 int check_Alarm_Time(){
 
+    int result = 0;
     if (al_isSet == TRUE
-        && (al_time.tm_min== currentTime->tm_min && al_time.tm_hour== currentTime->tm_hour && 0 == currentTime->tm_sec ))
-        return 1;
+        && (al_time.tm_min== (currentTime->tm_min) && al_time.tm_hour== currentTime->tm_hour && 0 == currentTime->tm_sec ))
+        result = 1;
     else
-        return 0;
+        result =  0;
+    return result;
 }
 
 int alarmController( ) {
