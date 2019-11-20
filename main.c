@@ -28,11 +28,12 @@ int main(int argc, char *argv[]) {
 
 
     system("clear");
+    printf("\e[?25l");
     pthread_create(&alarm_ctr, NULL, ringAlarm, NULL);
     set_conio_terminal_mode();
     while (1) {
-        if ( btn = pushedButtonDector())
-            printf("%d\r\n", btn);
+//        if ( btn = pushedButtonDector())
+//            printf("%d\r\n", btn);
         alarmController();
         backLightController(btn);
         modeController();
