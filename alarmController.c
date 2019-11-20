@@ -19,12 +19,12 @@ void *ringAlarm(void* args) {
     while (1) {
         clock_gettime( CLOCK_MONOTONIC, &from);
         if (isRingAlarm)
-            system("echo -e '\a'");
+            printf("\a");
         while (isRingAlarm) {
             clock_gettime( CLOCK_MONOTONIC, &now );
             if ( ( now.tv_sec * 1000000000 + now.tv_nsec )
                  - ( from.tv_sec * 1000000000 + from.tv_nsec ) > 999999999 ) {
-                system("echo -e '\a'");
+                printf("\a");
                 /*XXX*///printf("ringAlarm() : ring\r\n");
                 clock_gettime( CLOCK_MONOTONIC, &from );
             }
